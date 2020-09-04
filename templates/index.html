@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
+        integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+    <title>Attack of TwitterClone</title>
+</head>
+
+<body>
+    <ul class="nav nav-tabs" style="color: orangered;">
+        <li class="nav-item">
+            <a class="nav-link {{index}}" href="/" style="color: orangered;">Home</a>
+        </li>
+        {% if request.custom_user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="/{{request.user.username}}/" style="color: orangered;">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="/logout/" style="color: orangered;">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link {{login}}" href="/login/" style="color: orangered;">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{signup}}" href="/signup/" style="color: orangered;">Sign Up</a>
+        </li>
+        {% endif %}
+    </ul>
+    <div class="container" style="color: orangered;">
+        <h1>Welcome to Attack of TwitterClone</h1>
+        <div>
+            <button><a href="/tweet/">Create Tweet</a></button>
+        </div>
+        <div>
+            {% for tweet in tweets%}
+            <div>
+                <h3><a href="/profile/{{ tweet.madeBy.username}}/">{{ tweet.madeBy.display_name}}</a></h3>
+                <h4><a href="/profile/{{ tweet.madeBy.username}}/">@{{ tweet.madeBy.username}}</a></h4>
+                <p>{{ tweet.body}}</p>
+                <h6>{{ tweet.date}}</h6>
+            </div>
+            {% endfor %}
+        </div> 
+    </div>
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"
+        integrity="sha384-XEerZL0cuoUbHE4nZReLT7nx9gQrQreJekYhJD9WNWhH8nEW+0c5qq7aIo2Wl30J"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
