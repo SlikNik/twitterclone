@@ -13,17 +13,23 @@
 
 <body>
     <ul class="nav nav-tabs" style="color: orangered;">
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link {{index}}" href="/" style="color: orangered;">Home</a>
+            <a class="nav-link {{index}}" href="/home/" style="color: orangered;">Home</a>
         </li>
-        {% if request.custom_user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link" href="/{{request.user.username}}/" style="color: orangered;">Profile</a>
+            <a class="nav-link" href="/profile/{{request.user.username}}/" style="color: orangered;">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/notification/" style="color: orangered;">Notifications</a>
         </li>
         <li class="nav-item">
             <a class="nav-link " href="/logout/" style="color: orangered;">Logout</a>
         </li>
         {% else %}
+        <li class="nav-item">
+            <a class="nav-link {{index}}" href="/" style="color: orangered;">Home</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link {{login}}" href="/login/" style="color: orangered;">Login</a>
         </li>
@@ -33,7 +39,11 @@
         {% endif %}
     </ul>
     <div class="container" style="color: orangered;">
+        {% if request.user.is_authenticated %}
+        <h1>Welcome {{request.user.username}} to Attack of TwitterClone</h1>
+        {% else %}
         <h1>Welcome to Attack of TwitterClone</h1>
+        {% endif %}
         <div>
             <button><a href="/tweet/">Create Tweet</a></button>
         </div>

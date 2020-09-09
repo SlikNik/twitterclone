@@ -13,14 +13,23 @@
 
 <body>
     <ul class="nav nav-tabs" style="color: orangered;">
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link {{index}}" href="/" style="color: orangered;">Home</a>
+            <a class="nav-link {{index}}" href="/home/" style="color: orangered;">Home</a>
         </li>
-        {% if request.custom_user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="/profile/{{request.user.username}}/" style="color: orangered;">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/notification/" style="color: orangered;">Notifications</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link " href="/logout/" style="color: orangered;">Logout</a>
         </li>
         {% else %}
+        <li class="nav-item">
+            <a class="nav-link {{index}}" href="/" style="color: orangered;">Home</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link {{login}}" href="/login/" style="color: orangered;">Login</a>
         </li>
@@ -33,9 +42,11 @@
         <h1>  {{ current_user.display_name }}'s Attack of TwitterClone!</h1>
         <h3>UserName: {{ current_user.username }}</h3>
         <h3>Email: {{ current_user.email }}</h3>
-        <h3>Following: {{ current_user.following }}</h3>
-        <h3>Followers: {{ current_user.followers }}</h3>
+        <h3>Followers: {{ current_user.followers.count }} user(s)</h3>
+        {% if request.user.is_authenticated and request.user != current_user%}
         <button><a href="/follow/{{ current_user.username }}/">Follow</a></button>
+        <button><a href="/unfollow/{{ current_user.username }}/">UnFollow</a></button>
+        {% endif %}
         <div>
             {% for tweet in tweets%}
             <div>

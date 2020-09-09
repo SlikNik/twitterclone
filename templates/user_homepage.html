@@ -38,13 +38,31 @@
         </li>
         {% endif %}
     </ul>
-    <div class="container">
-        <form action="" method="POST" style="color: orangered;">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" style="color: orangered;">Submit</button>
-        </form>
-
+    <div class="container" style="color: orangered;">
+        <h1>Welcome {{request.user.username}} to Attack of TwitterClone</h1>
+        <div>
+            <button><a href="/tweet/">Create Tweet</a></button>
+        </div>
+        <div>
+            {% for tweet in tweets%}
+            <div>
+                <h3><a href="/profile/{{ tweet.madeBy.username}}/">{{ tweet.madeBy.display_name}}</a></h3>
+                <h4><a href="/profile/{{ tweet.madeBy.username}}/">@{{ tweet.madeBy.username}}</a></h4>
+                <p>{{ tweet.body}}</p>
+                <h6>{{ tweet.date}}</h6>
+            </div>
+            {% endfor %}
+        </div> 
+        <div>
+            {% for tweet in following_tweets%}
+            <div>
+                <h3><a href="/profile/{{ tweet.madeBy.username}}/">{{ tweet.madeBy.display_name}}</a></h3>
+                <h4><a href="/profile/{{ tweet.madeBy.username}}/">@{{ tweet.madeBy.username}}</a></h4>
+                <p>{{ tweet.body}}</p>
+                <h6>{{ tweet.date}}</h6>
+            </div>
+            {% endfor %}
+        </div> 
     </div>
     <!-- JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -7,21 +7,41 @@ from twitteruser.models import TwitterUser
 from tweet.models import Tweet
 from twitteruser.forms import SignUpForm
 
-
-def user_view(request, username):
-    current_user = TwitterUser.objects.get(username=username)
-    user_tweets = Tweet.objects.filter(madeBy=current_user)
-    return render(request, 'user_detail.html', {'current_user': current_user , 'tweets': user_tweets})
+def index(request):
+    tweets = Tweet.objects.all()
+    return render(request, 'index.html' , {'tweets': tweets})
 
 @login_required
-def follow(request, username):
-    follow_user = TwitterUser.objects.get(username=request.user.username)
-    add_follower = TwitterUser.objects.get(username=username)
-    add_follower.followers.add(follow_user)
-    follow_user.following.add(add_follower)
-    follow_user.save()
-    add_follower.save()
-    return HttpResponseRedirect(reverse('homepage'))
+def user_home_view(request):
+    tweets = Tweet.objects.all().order_by('-date')
+    # following = request.user.followers.all()
+    return render(request, 'index.html', {"tweets": tweets})
+
+def user_detail(request, username):
+    current_user = TwitterUser.objects.filter(username=username).first()
+    tweets = Tweet.objects.filter(
+        madeBy=current_user).order_by('-date')
+    if current_user.is_authenticated:
+        followers = request.user.followers.all()
+    else:
+        followers = []
+    return render(request, 'user_detail.html', {"current_user": current_user, "tweets": tweets, "followers": followers})
+
+
+def follow_view(request, username):
+    current_user = request.user
+    following_user = TwitterUser.objects.filter(
+        username=username).first()
+    current_user.followers.add(following_user)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+
+def unfollow_view(request, username):
+    current_user = request.user
+    following_user = TwitterUser.objects.filter(
+        username=username).first()
+    current_user.followers.remove(following_user)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 def sign_up_view(request):
     if request.method == 'POST':

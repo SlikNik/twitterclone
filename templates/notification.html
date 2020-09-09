@@ -38,13 +38,15 @@
         </li>
         {% endif %}
     </ul>
-    <div class="container">
-        <form action="" method="POST" style="color: orangered;">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" style="color: orangered;">Submit</button>
-        </form>
-
+    {% if new %} 
+        {% for n in new %} 
+        {{n.body}}
+        {{n.madeBy}} 
+        {{n.date}} 
+        {% endfor %} 
+    {% else %}
+        <p>No New Notifications</p>
+    {% endif %}
     </div>
     <!-- JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -15,18 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from twitteruser.views import user_view, sign_up_view, follow
-from tweet.views import index, tweet_submit
-from authentication.views import login_view, logout_view
+from twitteruser import views as twitteruserviews
+from authentication import views as authenticateviews
+from tweet import views as tweetviews
+from notification import views as notificationviews
 
 
 urlpatterns = [
-    path('', index, name='homepage'),
-    path('login/', login_view, name="loginview"),
-    path('logout/', logout_view, name="logoutview"),
-    path('signup/', sign_up_view, name="signupview"),
-    path('profile/<str:username>/', user_view, name='profile'),
-    path('tweet/', tweet_submit, name='tweetsubmit'),
-    path('follow/<str:username>/', follow, name='follow'),
+    path('', twitteruserviews.index, name='homepage'),
+    path('login/', authenticateviews.login_view, name="loginview"),
+    path('logout/', authenticateviews.logout_view, name="logoutview"),
+    path('signup/', twitteruserviews.sign_up_view, name="signupview"),
+    path('profile/<str:username>/', twitteruserviews.user_detail, name='profile'),
+    path('tweet/<int:id>/', tweetviews.tweet_detail, name='tweetdetail'),
+    path('home/', twitteruserviews.user_home_view, name='userhomepage'),
+    path('tweet/', tweetviews.tweet_submit, name='tweetsubmit'),
+    path('notification/', notificationviews.notified, name='notification'),
+    path('follow/<str:username>/', twitteruserviews.follow_view, name='follow'),
+    path('unfollow/<str:username>/', twitteruserviews.unfollow_view, name='unfollow'),
     path('admin/', admin.site.urls),
 ]

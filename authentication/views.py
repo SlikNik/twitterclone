@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from authentication.forms import LoginForm
 
 
@@ -13,7 +13,7 @@ def login_view(request):
             check_user = authenticate(request, username=data.get('username'), password=data.get('password'))
             if check_user:
                 login(request, check_user)
-                return HttpResponseRedirect(reverse('homepage'))
+                return HttpResponseRedirect(reverse('userhomepage'))
                 # return HttpResponseRedirect(request.GET.get( 'next',reverse('homepage')))
       
     form = LoginForm()

@@ -3,7 +3,6 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import django.utils.timezone
 
 
 class Migration(migrations.Migration):
@@ -12,16 +11,17 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('tweet', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tweet',
+            name='Notification',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('body', models.CharField(max_length=140)),
-                ('date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('madeBy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('readed', models.BooleanField(default=False)),
+                ('receiver', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('track', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tweet.tweet')),
             ],
         ),
     ]
