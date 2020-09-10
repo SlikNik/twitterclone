@@ -3,13 +3,21 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from twitteruser.models import TwitterUser
 from tweet.models import Tweet
 from twitteruser.forms import SignUpForm
 
-def index(request):
-    tweets = Tweet.objects.all()
-    return render(request, 'index.html' , {'tweets': tweets})
+# def index(request):
+#     tweets = Tweet.objects.all()
+#     return render(request, 'index.html' , {'tweets': tweets})
+
+class Index(TemplateView):
+
+    def get(self, request):
+        tweets = Tweet.objects.all()
+        return render(request, 'index.html', {"tweet": tweets})
 
 @login_required
 def user_home_view(request):
@@ -43,8 +51,32 @@ def unfollow_view(request, username):
     current_user.followers.remove(following_user)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
-def sign_up_view(request):
-    if request.method == 'POST':
+# def sign_up_view(request):
+#     if request.method == 'POST':
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             data = form.cleaned_data
+#             new_user = TwitterUser.objects.create_user(
+#                 username=data.get('username'), 
+#                 password=data.get('password'), 
+#                 email=data.get('email'),
+#                 display_name=data.get('display_name'),
+#                 first_name=data.get('first_name'),
+#                 last_name=data.get('last_name'),
+#             )
+#             login(request, new_user)
+#             return HttpResponseRedirect(reverse('homepage'))
+
+#     form = SignUpForm()
+#     return render(request, 'generic_form.html',  {'form': form})
+
+class SignUpView(TemplateView):
+
+    def get(self, request):
+        form = SignUpForm()
+        return render(request, 'generic_form.html', {'form': form})
+    
+    def post(self, request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -58,7 +90,5 @@ def sign_up_view(request):
             )
             login(request, new_user)
             return HttpResponseRedirect(reverse('homepage'))
-
-    form = SignUpForm()
-    return render(request, 'generic_form.html',  {'form': form})
-
+        else:
+            return render(request, 'generic_form.html', {'form': form})
